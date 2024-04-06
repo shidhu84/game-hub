@@ -14,9 +14,10 @@ const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 interface Props {
   onGenreSelect: (genre: Genre) => void;
+  selectedGenre: Genre | null;
 }
 
-function GenreList({ onGenreSelect }: Props) {
+function GenreList({ selectedGenre, onGenreSelect }: Props) {
   const { data: genres, error, isLoading } = useGenres();
   if (error) return null;
   return (
@@ -38,6 +39,7 @@ function GenreList({ onGenreSelect }: Props) {
             />
             <Button
               fontSize='lg'
+              fontWeight={genre.id === selectedGenre?.id ? 'bold' : 'normal'}
               variant='link'
               onClick={() => {
                 onGenreSelect(genre);
