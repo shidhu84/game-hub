@@ -1,6 +1,7 @@
 import React from 'react';
-import useGenres from '../hooks/useGenres';
+import useGenres, { Genre } from '../hooks/useGenres';
 import {
+  Button,
   HStack,
   Image,
   List,
@@ -11,14 +12,18 @@ import {
 import getCroppedImageUrl from '../services/image-url';
 const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-function GenreList() {
+interface Props {
+  onGenreSelect: (genre: Genre) => void;
+}
+
+function GenreList({ onGenreSelect }: Props) {
   const { data: genres, error, isLoading } = useGenres();
   if (error) return null;
   return (
     <List>
       {isLoading &&
         skeletons.map((skeleton) => (
-          <ListItem>
+          <ListItem key={skeleton}>
             <SkeletonText />
           </ListItem>
         ))}
@@ -31,7 +36,15 @@ function GenreList() {
               src={getCroppedImageUrl(genre.image_background)}
               alt={genre.name}
             />
-            <Text fontSize='lg'>{genre.name}</Text>
+            <Button
+              fontSize='lg'
+              variant='link'
+              onClick={() => {
+                onGenreSelect(genre);
+              }}
+            >
+              {genre.name}
+            </Button>
           </HStack>
         </ListItem>
       ))}
