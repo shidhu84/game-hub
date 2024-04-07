@@ -4,11 +4,15 @@ import logo from '../assets/logo.webp';
 import SwithThemeColor from './SwithThemeColor';
 import SearchInput from './SearchInput';
 
-function NavBar() {
+interface Props {
+  onSearch: (searchText: string) => void;
+}
+
+function NavBar({onSearch}: Props) {
   return (
     <HStack padding='10px'>
       <Image src={logo} boxSize='60px' />
-      <SearchInput />
+      <SearchInput onSearch={onSearch}/>
       <SwithThemeColor />
     </HStack>
   );
