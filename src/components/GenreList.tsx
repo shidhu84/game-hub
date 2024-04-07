@@ -3,6 +3,7 @@ import useGenres, { Genre } from '../hooks/useGenres';
 import {
   Button,
   HStack,
+  Heading,
   Image,
   List,
   ListItem,
@@ -21,36 +22,44 @@ function GenreList({ selectedGenre, onGenreSelect }: Props) {
   const { data: genres, error, isLoading } = useGenres();
   if (error) return null;
   return (
-    <List>
-      {isLoading &&
-        skeletons.map((skeleton) => (
-          <ListItem key={skeleton}>
-            <SkeletonText />
+    <>
+      <Heading fontSize='2xl' marginBottom={3}>
+        Genres
+      </Heading>
+      <List>
+        {isLoading &&
+          skeletons.map((skeleton) => (
+            <ListItem key={skeleton}>
+              <SkeletonText />
+            </ListItem>
+          ))}
+        {genres.map((genre) => (
+          <ListItem key={genre.id} paddingY='5px'>
+            <HStack>
+              <Image
+                boxSize='32px'
+                fit='cover'
+                borderRadius={8}
+                src={getCroppedImageUrl(genre.image_background)}
+                alt={genre.name}
+              />
+              <Button
+                fontSize='lg'
+                whiteSpace='normal'
+                textAlign='left'
+                fontWeight={genre.id === selectedGenre?.id ? 'bold' : 'normal'}
+                variant='link'
+                onClick={() => {
+                  onGenreSelect(genre);
+                }}
+              >
+                {genre.name}
+              </Button>
+            </HStack>
           </ListItem>
         ))}
-      {genres.map((genre) => (
-        <ListItem key={genre.id} paddingY='5px'>
-          <HStack>
-            <Image
-              boxSize='32px'
-              borderRadius={8}
-              src={getCroppedImageUrl(genre.image_background)}
-              alt={genre.name}
-            />
-            <Button
-              fontSize='lg'
-              fontWeight={genre.id === selectedGenre?.id ? 'bold' : 'normal'}
-              variant='link'
-              onClick={() => {
-                onGenreSelect(genre);
-              }}
-            >
-              {genre.name}
-            </Button>
-          </HStack>
-        </ListItem>
-      ))}
-    </List>
+      </List>
+    </>
   );
 }
 
